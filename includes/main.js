@@ -23,6 +23,13 @@ function initiateApp(){
 	/*advanced: add jquery sortable call here to make the gallery able to be sorted
 		//on change, rebuild the images array into the new order
 	*/
+	$("#gallery").sortable({
+		update: function() {
+			var testArray = $("figure").css("background-image")
+			console.log(testArray);
+		}
+	});
+	$("#gallery").disableSelection();
 	makeGallery(pictures);
 	addModalCloseHandler();
 }
@@ -35,30 +42,50 @@ function makeGallery(imageArray){
 		//attach a click handler to the figure you create.  call the "displayImage" function.  
 
 		//append the element to the #gallery section
-
+    for (var makeGalleryCounter = 0; makeGalleryCounter < imageArray.length; makeGalleryCounter++) {
+        var galleryPicture = $("<figure>", {
+        	class: "imageGallery col-xs-12 col-sm-6 col-md-4",
+			style: "background-image:url("+imageArray[makeGalleryCounter]+")",
+		});
+        var galleryPictureCaption = $("<figcaption>", {
+        	text: imageArray[makeGalleryCounter]
+		});
+        galleryPicture.append(galleryPictureCaption);
+        $(galleryPicture).click(displayImage);
+        $('#gallery').append(galleryPicture);
+    }
 }
 
-function addModalCloseHandler(){
-	//add a click handler to the img element in the image modal.  When the element is clicked, close the modal
-	//for more info, check here: https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp	
+function addModalCloseHandler() {
+    //add a click handler to the img element in the image modal.  When the element is clicked, close the modal
+    //for more info, check here: https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+	$("img").click(function() {
+		$("#galleryModal").modal('hide');
+	});
 }
 
-function displayImage(){
-	//find the url of the image by grabbing the background-image source, store it in a variable
-	//grab the direct url of the image by getting rid of the other pieces you don't need
+function displayImage() {
+    //find the url of the image by grabbing the background-image source, store it in a variable
+    //grab the direct url of the image by getting rid of the other pieces you don't need
 
-	//grab the name from the file url, ie the part without the path.  so "images/pexels-photo-132037.jpeg" would become
-		// pexels-photo-132037
-		//take a look at the lastIndexOf method
+    //grab the name from the file url, ie the part without the path.  so "images/pexels-photo-132037.jpeg" would become
+    // pexels-photo-132037
+    //take a look at the lastIndexOf method
 
-	//change the modal-title text to the name you found above
-	//change the src of the image in the modal to the url of the image that was clicked on
+    //change the modal-title text to the name you found above
+    //change the src of the image in the modal to the url of the image that was clicked on
 
-	//show the modal with JS.  Check for more info here: 
-	//https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+    //show the modal with JS.  Check for more info here:
+    //https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp}
+	var backgroundImageSource = $(this).css("background-image");
+	var backgroundImageFilename = backgroundImageSource.split('/').pop();
+	var backgroundImageDirect = backgroundImageFilename.substring(0, backgroundImageFilename.lastIndexOf('.'));
+	var backgroundImageModalBody = $(this).css("background-image").replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+
+	$(".modal-title").text(backgroundImageDirect);
+	$("img").attr('src', backgroundImageModalBody);
+
+	$("#galleryModal").modal('show');
 }
-
-
-
 
 
