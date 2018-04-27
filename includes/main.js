@@ -23,12 +23,7 @@ function initiateApp(){
 	/*advanced: add jquery sortable call here to make the gallery able to be sorted
 		//on change, rebuild the images array into the new order
 	*/
-	$("#gallery").sortable({
-		update: function() {
-			var testArray = $("figure").css("background-image")
-			console.log(testArray);
-		}
-	});
+	$("#gallery").sortable();
 	$("#gallery").disableSelection();
 	makeGallery(pictures);
 	addModalCloseHandler();
