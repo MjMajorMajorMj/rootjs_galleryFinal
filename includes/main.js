@@ -23,8 +23,23 @@ function initiateApp(){
 	/*advanced: add jquery sortable call here to make the gallery able to be sorted
 		//on change, rebuild the images array into the new order
 	*/
-	$("#gallery").sortable();
-	$("#gallery").disableSelection();
+	for (var sortCount = 0; sortCount < pictures.length; sortCount++) {
+	    $("figcaption").addClass("disable-sort");
+    }
+	$("#gallery").sortable({
+        cancel: ".disable-sort",
+        update: function updateGallery(figures) {
+            var updatedPictures = [];
+            for (var figureCounter = 0; figureCounter < figures.length; figureCounter++) {
+                updatedPictures.push(figures[figureCounter].textContent);
+            }
+            pictures = updatedPictures;
+			if (updatedPictures.length != 20) {
+                updateGallery($("figure"));
+            }
+        }
+	})
+
 	makeGallery(pictures);
 	addModalCloseHandler();
 }
